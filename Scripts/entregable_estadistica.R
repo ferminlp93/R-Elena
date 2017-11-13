@@ -1,3 +1,5 @@
+#####################1. Cálculo de nuevas variables, recodificación y filtrado#####################
+
 
 #Importamos el fichero de jaen
 #Código INE del municipio.
