@@ -60,3 +60,16 @@ Datos.Jaen.Medianos <- Datos.Jaen[Datos.Jaen$poblacioncat == 'Mediano',]
 
 save(Datos.Jaen, Datos.Jaen.Medianos, file = "./Datos/JaenIndicadores.RData")
 
+
+#####################2. Análisis Estadístico Descriptivo de Datos#####################
+
+#1. Importar el fichero Andalucia.txt y denominar a la hoja de datos (data frame) Datos.Andalucia. Comprobar si en el archivo 
+#.txt hay datos faltantes y cómo están codificados.
+
+Datos.Andalucia <-  read.table('./Datos/Andalucia-utf8.txt',sep="\t", header=TRUE, encoding  ="UTF-8")
+Datos.Andalucia[Datos.Andalucia$Renta.familiar.por.habitante.2003 == "..","Renta.familiar.por.habitante.2003"] <- NA
+
+#2. A partir de la variable código INE, construir una variable tipo factor que distinga la provincia de pertenencia de cada municipio,
+#denominarla “Provincia” y añadirla al data frame. 
+
+
