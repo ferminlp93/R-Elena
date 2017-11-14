@@ -71,5 +71,39 @@ Datos.Andalucia[Datos.Andalucia$Renta.familiar.por.habitante.2003 == "..","Renta
 
 #2. A partir de la variable código INE, construir una variable tipo factor que distinga la provincia de pertenencia de cada municipio,
 #denominarla “Provincia” y añadirla al data frame. 
+#head(ine)
+Datos.fProv = c("Almeria","Cadiz","Cordoba","Granada","Huelva","Jaen","Malaga","Sevilla")
 
+Datos.Andalucia$IdINE <- substr(Datos.Andalucia$Codigo.INE,1,nchar(Datos.Andalucia$Codigo.INE)-3)
 
+Datos.Andalucia$Provincia[Datos.Andalucia$IdINE == 4] <- Datos.fProv[1]
+Datos.Andalucia$Provincia[Datos.Andalucia$IdINE == 11] <- Datos.fProv[2]
+Datos.Andalucia$Provincia[Datos.Andalucia$IdINE == 14] <- Datos.fProv[3]
+Datos.Andalucia$Provincia[Datos.Andalucia$IdINE == 18] <- Datos.fProv[4]
+Datos.Andalucia$Provincia[Datos.Andalucia$IdINE == 21] <- Datos.fProv[5]
+Datos.Andalucia$Provincia[Datos.Andalucia$IdINE == 23] <- Datos.fProv[6]
+Datos.Andalucia$Provincia[Datos.Andalucia$IdINE == 29] <- Datos.fProv[7]
+Datos.Andalucia$Provincia[Datos.Andalucia$IdINE == 41] <- Datos.fProv[8]
+
+#Obtener la distribución de frecuencias absolutas y relativas, un diagrama de barras con las frecuencias absolutas y un 
+#diagrama de sectores con las frecuencias relativas en porcentajes de esta variable tipo factor. 
+#¿Qué provincia tiene más municipios? ¿Cuál tiene menos? ¿Qué porcentaje representa en cada caso?
+
+Datos.Andalucia$Provincia <- as.factor(Datos.Andalucia$Provincia)
+print('Frecuencia absoluta: ')
+frec.abs <-table(Datos.Andalucia$Provincia)
+frec.abs
+print('Frecuencia relativa')
+frec.rel <-table(Datos.Andalucia$Provincia)/sum(table(Datos.Andalucia$Provincia))*100
+frec.rel
+
+#Bar plot frecuencias absolutas
+barplot(frec.abs, main="Frecuencia absolutas por provincia")
+
+#Pie plot frecuencias relativas
+slices <- frec.rel
+lbls <- rownames(frec.rel)
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct) # add percents to labels
+lbls <- paste(lbls,"%",sep="") # ad % to labels
+pie(slices,labels = lbls, col=rainbow(length(lbls)), main="Frecuencias relativas por provincia") 
