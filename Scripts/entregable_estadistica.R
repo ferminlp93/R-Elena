@@ -19,6 +19,7 @@ Datos.Jaen <-Datos.Jaen[complete.cases(Datos.Jaen), ]
 #  Si la población es inferior a 2000 habitantes, Tamaño será “Pequeño”.
 #  Si la población está entre 2000 y 4500 habitantes, Tamaño será “Mediano”.
 #  Si la población es superior a 4500 habitantes, Tamaño será “Grande”.
+options(warn=-1)
 
 Datos.Jaen$poblacioncat[(as.numeric(as.character(Datos.Jaen$poblacion)))<= 2000] <- "Pequeño"
 
@@ -32,6 +33,7 @@ Datos.Jaen$poblacion <- Datos.Jaen$poblacioncat
 
 Datos.Jaen<-Datos.Jaen[1:8]
 
+options(warn=0)
 #3. Calcular los siguientes promedios que se especifican a continuación y añadirlos como nuevas variables al fichero Datos.Jaen obtenidas a partir de las variables existentes: 
 #  Variable elec.hab que contendrá el consumo de energía eléctrica por habitante, obtenida como Consumo.de.energia.electrica/Poblacion
 #  Variable agua.hab que contendrá el consumo medio de agua por habitante y día, obtenida como (Consumo.de.agua..Invierno + Consumo.de.agua..V erano)/Poblacion
