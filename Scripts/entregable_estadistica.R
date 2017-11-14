@@ -45,6 +45,18 @@ options(warn=0)
 #3. Calcular los siguientes promedios que se especifican a continuación y añadirlos como nuevas variables al fichero Datos.Jaen obtenidas a partir de las variables existentes: 
 #  Variable elec.hab que contendrá el consumo de energía eléctrica por habitante, obtenida como Consumo.de.energia.electrica/Poblacion
 #  Variable agua.hab que contendrá el consumo medio de agua por habitante y día, obtenida como (Consumo.de.agua..Invierno + Consumo.de.agua..V erano)/Poblacion
-
+#  Variable res.hab que contendrá los residuos sólidos urbanos por habitante, obtenida como Residuos.solidos.urbanos..Cantidad/Poblacion
 Datos.Jaen$elec.hab <- Datos.Jaen$consumoelec/Datos.Jaen$poblacion
 Datos.Jaen$agua.hab <- (Datos.Jaen$consumoaguainv+Datos.Jaen$consumoaguaver)/Datos.Jaen$poblacion
+Datos.Jaen$res.hab <- Datos.Jaen$residuoscant/Datos.Jaen$poblacion
+
+#4. Crear una nueva hoja de datos con todas las variables que contiene actualmente el data frame Datos.Jaen, pero referida 
+#sólo a los municipios de tamaño mediano y denominarla Datos.Jaen.Medianos
+
+Datos.Jaen.Medianos <- Datos.Jaen[Datos.Jaen$poblacioncat == 'Mediano',]
+
+#5. Guardar la hoja de datos Datos.Jaen con las nuevas variables creadas en los apartados anteriores y la hoja que contiene 
+#los datos de las poblaciones medianas (Datos.Jaen.Medianos) en un archivo de datos de R y llamadlo JaenIndicadores.RData
+
+save(Datos.Jaen, Datos.Jaen.Medianos, file = "./Datos/JaenIndicadores.RData")
+
