@@ -103,7 +103,18 @@ barplot(frec.abs, main="Frecuencia absolutas por provincia")
 #Pie plot frecuencias relativas
 slices <- frec.rel
 lbls <- rownames(frec.rel)
-pct <- round(slices/sum(slices)*100)
+pct <- round(slices/sum(slices)*100,2)
 lbls <- paste(lbls, pct) # add percents to labels
 lbls <- paste(lbls,"%",sep="") # ad % to labels
 pie(slices,labels = lbls, col=rainbow(length(lbls)), main="Frecuencias relativas por provincia") 
+
+#3. Obtener un resumen descriptivo de la variable tasa de actividad de 2001 que incluya parámetros de posición, dispersión, asimetría
+#y curtosis, histograma y diagrama de caja. En función de este resumen, contestar a las siguientes preguntas:
+
+#Vamos a arreglar la columna para los calculos
+#Cambiar comas por puntos. Si lo dejaramos como está la conversión a otro tipo de dato sería errónea.
+
+Datos.Andalucia$Tasa.actividad.2001 <- gsub("\\,", ".", Datos.Andalucia$Tasa.actividad.2001)
+Datos.Andalucia$Tasa.actividad.2001 <- (as.double(Datos.Andalucia$Tasa.actividad.2001))
+
+
