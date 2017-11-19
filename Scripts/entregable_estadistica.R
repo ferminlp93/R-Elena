@@ -96,7 +96,6 @@ frec.abs
 print('Frecuencia relativa')
 frec.rel <-table(Datos.Andalucia$Provincia)/sum(table(Datos.Andalucia$Provincia))*100
 frec.rel
-
 #Bar plot frecuencias absolutas
 barplot(frec.abs, main="Frecuencia absolutas por provincia")
 
@@ -117,4 +116,75 @@ pie(slices,labels = lbls, col=rainbow(length(lbls)), main="Frecuencias relativas
 Datos.Andalucia$Tasa.actividad.2001 <- gsub("\\,", ".", Datos.Andalucia$Tasa.actividad.2001)
 Datos.Andalucia$Tasa.actividad.2001 <- (as.double(Datos.Andalucia$Tasa.actividad.2001))
 
+#####################Parámetros de posición#####################
 
+summary(Datos.Andalucia$Tasa.actividad.2001)
+#Media
+media <- mean(Datos.Andalucia$Tasa.actividad.2001)
+#Mediana
+mediana <- median(Datos.Andalucia$Tasa.actividad.2001, na.rm=T)
+# Percentil 5% y percentil 95%
+percep <-quantile(Datos.Andalucia$Tasa.actividad.2001,probs=c(0.05,0.95),na.rm=TRUE)
+## Mínimo
+min.Tasa<-min(Datos.Andalucia$Tasa.actividad.2001, na.rm=T)
+## Máximo
+max.Tasa<-max(Datos.Andalucia$Tasa.actividad.2001, na.rm=T)
+## Primer cuartil
+q1.Tasa<-quantile(Datos.Andalucia$Tasa.actividad.2001, probs=0.25, na.rm=T)
+## Tercer cuartil
+q3.Tasa<-quantile(Datos.Andalucia$Tasa.actividad.2001, probs=0.75, na.rm=T)
+
+#####################Parámetros de dispersión#####################
+# Desviación típica
+Des.tipica <- sd(Datos.Andalucia$Tasa.actividad.2001,na.rm=TRUE)
+# Varianza
+Varianza <- var(Datos.Andalucia$Tasa.actividad.2001,na.rm=TRUE)
+# Recorrido intercuartílico
+ri.Tasa<-q3.Tasa-q1.Tasa
+# Rango
+rango.Tasa<-max.Tasa-min.Tasa
+
+
+#####################Parámetros de forma###################
+install.packages("e1071", dep = TRUE)
+library(e1071)
+coef_asimetria <- skewness(Datos.Andalucia$Tasa.actividad.2001,na.rm=TRUE)
+print (coef_asimetria)
+
+coef_curtosis <- kurtosis(Datos.Andalucia$Tasa.actividad.2001,na.rm=TRUE)
+print (coef_curtosis)
+
+#histograma
+hist(Datos.Andalucia$Tasa.actividad.2001)
+
+#Diagrama de caja
+boxplot(Datos.Andalucia$Tasa.actividad.2001)
+
+
+
+#3.1. ¿Cuál es la tasa media de actividad de los municipios andaluces? 
+#¿Crees que este valor es adecuado para representar la Tasa de Actividad de los municipios andaluces durante 2001?
+
+#Valor medio = 51.44
+#Creemos que es un valor correcto ya que no tenemos outlayers muy grandes lo que hace que la media y la media estén muy cercanas
+
+#3.2. ¿Cómo valoras la homogeneidad de los valores de la tasa de actividad en los municipios andaluces? 
+#¿Qué parámetro elegirías para representar la dispersión de la Tasa de Actividad de 2001?
+
+#En el dataset analizado la tasa de actividad parece homogneo ya que los datos no presentan mucha desviación y el coeficiente de
+#asimetría presenta un valor muy bajo.
+
+#Podemos elegir la desviación típica ya que es una medida de dispersión de las variables Des.tipica. Segun los valores que tenemos
+#consideramos que el valor de desviación típica 6.98 es bastante bajo viendo que los valores estan entre 30 y 70
+
+#3.3. ¿En ese sentido, qué municipios andaluces destacan significativamente del resto (como atípicos) 
+#por su alta tasa de actividad y por su baja tasa de actividad? ¿Se te ocurre alguna explicación al respecto?
+
+#which(Datos.Andalucia$Tasa.actividad.2001==min.Tasa)
+outlier_values <- boxplot.stats(Datos.Andalucia$Tasa.actividad.2001)$out #vemos los outlayers
+Datos.Andalucia$Municipio[which(Datos.Andalucia$Tasa.actividad.2001<=28.08)] #-- Benitagla    Lobras  
+Datos.Andalucia$Municipio[which(Datos.Andalucia$Tasa.actividad.2001>=70.96)] #-- Vícar                Ejido (El)           Mojonera (La)        Alcalá del Valle     Castilleja de Guzmán)$out 
+
+#3.4. ¿Cómo valoras la simetría de la distribución de frecuencia?
+
+#Es bastante simétrica ya que el coefieciente de asimetria es cercano a 0. 
