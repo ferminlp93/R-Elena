@@ -155,12 +155,17 @@ coef_curtosis <- kurtosis(Datos.Andalucia$Tasa.actividad.2001,na.rm=TRUE)
 print (coef_curtosis)
 
 #histograma
-hist(Datos.Andalucia$Tasa.actividad.2001)
+hist(Datos.Andalucia$Tasa.actividad.2001, main = "Tasa de Actividad de Andalucía en 2001", xlab="Tasa Actividad")
 
 #Diagrama de caja
-boxplot(Datos.Andalucia$Tasa.actividad.2001)
+boxplot(Datos.Andalucia$Tasa.actividad.2001, main = "Tasa de Actividad de Andalucía en 2001", 
+        col = "lightgray", ylab="Tasa Actividad")
 
-
+## boxplot on a formula:
+boxplot(count ~ spray, data = InsectSprays, col = "lightgray")
+# *add* notches (somewhat funny here):
+boxplot(count ~ spray, data = InsectSprays,
+        notch = TRUE, add = TRUE, col = "blue")
 
 #3.1. ¿Cuál es la tasa media de actividad de los municipios andaluces? 
 #¿Crees que este valor es adecuado para representar la Tasa de Actividad de los municipios andaluces durante 2001?
@@ -184,6 +189,12 @@ boxplot(Datos.Andalucia$Tasa.actividad.2001)
 outlier_values <- boxplot.stats(Datos.Andalucia$Tasa.actividad.2001)$out #vemos los outlayers
 Datos.Andalucia$Municipio[which(Datos.Andalucia$Tasa.actividad.2001<=28.08)] #-- Benitagla    Lobras  
 Datos.Andalucia$Municipio[which(Datos.Andalucia$Tasa.actividad.2001>=70.96)] #-- Vícar                Ejido (El)           Mojonera (La)        Alcalá del Valle     Castilleja de Guzmán)$out 
+
+#En principio, no parece que los outliers se deban a datos anómalos o mal registrados, puesto que la tasa de actividad no deja de ser un valor razonable.
+#Para los municipios que poseen una tasa de actividad baja (Benitagla y Lobras) se ha observado que se trata de pueblos con muy poca población y una edad media bastante elevada. Lo cual explicaria una reducida tasa de actividad.
+#Por el contrario, los municipios que presentan una tasa de actividad alta (Vícar, Ejido (El), Mojonera (La), Alcalá del Valle y Castilleja de Guzmán)
+#son municipios con una media de edad baja y de poblacion bastante elevada, lo cual explicaria una tasa de actividad mas alta.
+
 
 #3.4. ¿Cómo valoras la simetría de la distribución de frecuencia?
 
