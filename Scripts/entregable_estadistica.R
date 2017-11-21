@@ -161,11 +161,6 @@ hist(Datos.Andalucia$Tasa.actividad.2001, main = "Tasa de Actividad de Andalucí
 boxplot(Datos.Andalucia$Tasa.actividad.2001, main = "Tasa de Actividad de Andalucía en 2001", 
         col = "lightgray", ylab="Tasa Actividad")
 
-## boxplot on a formula:
-boxplot(count ~ spray, data = InsectSprays, col = "lightgray")
-# *add* notches (somewhat funny here):
-boxplot(count ~ spray, data = InsectSprays,
-        notch = TRUE, add = TRUE, col = "blue")
 
 #3.1. ¿Cuál es la tasa media de actividad de los municipios andaluces? 
 #¿Crees que este valor es adecuado para representar la Tasa de Actividad de los municipios andaluces durante 2001?
@@ -199,3 +194,20 @@ Datos.Andalucia$Municipio[which(Datos.Andalucia$Tasa.actividad.2001>=70.96)] #--
 #3.4. ¿Cómo valoras la simetría de la distribución de frecuencia?
 
 #Es bastante simétrica ya que el coefieciente de asimetria es cercano a 0. 
+
+#4. Obtener un gráfico de caja de la Tasa de actividad en 2001 en función de la provincia y describe brevemente la información que contienen los datos a partir del gráfico.
+
+boxplot(formula = Datos.Andalucia$Tasa.actividad.2001 ~ Datos.Andalucia$Provincia, 
+        main = "Tasa de Actividad por Provincia",
+        xlab = "Provincia",
+        ylab = "Actividad",
+        col = rainbow(8))
+
+#A la vista del gráfico de cajas podemos observar que la mediana en todas las provincias se situa entorno al mismo rango (entre el 45 y 55 de Tasa de Actividad). Hecho que coincide 
+#con el análisis realizado por el conjunto de tasa de actividad sobre todo el conjunto andaluz.
+#Además, si bien es cierto que la mayoría de provincias presentan una varianza similar, hay casos especiales como puede ser Almería (que muestra una alta dispersión)
+#y Cádiz (que presenta una varianza muy baja, lo que hace que la mayoría de valores se sitúen próximos a su mediana).
+#Por otra parte, a pesar de que tanto Cádiz como Sevilla presentan ligeras asimetrías negativa y positiva, respectivamente, no se trata de asimetrías que puedan ser
+#consideradas significativas. En conclusión podemos afirmar que la tasa de actividad de todas las provincias presentan un coeficiente de asimetría prácticamente nulo.
+#Por último, podemos observar como el conjunto de outliers depende de cada provincia. Habiendo provincias que no presentan datos anómalos (Córdoba o Málaga),
+#mientras que otras representan varios outliers (Cádiz y Sevilla, por ejemplo).
