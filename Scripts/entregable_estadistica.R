@@ -233,7 +233,7 @@ qbinom(0.95, 15, 0.33) #8
 #Generamos las muestras
 muestra_binomial <- rbinom(1000, 15, 0.33)
 
-#Consultados datos
+#Comprobación de datos
 summary(muestra_binomial)
 
 #Histograma de la muestra binomial generada
@@ -245,4 +245,60 @@ hist(muestra_binomial, main="Distribución Binomial")
 #Ya que el valor 6 intuimos que puede dejar a su izquierda el 75% de los datos, mientras que el valor 8 abarca el 95% de los mismos.
 
 
+#2. Consideremos una variable aleatoria W con distribución N (250, 13). Se pide:
 
+#2.1. P [240 < W ≤ 245.5]
+
+#P(240 < W < 245.5) = F(245.5) - F(240)
+pnorm(245.5, 250, 13) - pnorm(240, 250, 13) #0.1437354
+
+#2.2. P [W ≥ 256]
+#P(W > 256) = 1 - P(W <= 256)
+1 - pnorm(256, 250, 13) #0.3222062
+
+#2.3. Si queremos desechar el 5% de valores más altos de la distribución y el 5% de valores más bajos, ¿con qué intervalo de valores nos quedaremos?
+
+#Limite inferior: N(m=250, S=13). P(W <= w)=0.05 ¿w? 
+qnorm(0.05, 250, 13)  #228.6169
+
+#Limite superior: N(m=250, S=13). P(W <= w)=0.95 ¿w? 
+qnorm(0.95, 250, 13)  #271.3831
+
+#Por tanto, el intervalo de valores con el que nos quedaremos será [228.6169 - 271.3831]
+
+#2.4. Obtener una muestra de tamaño 1000 de la distribución, representar la función de densidad de esta distribución y compararla con el histograma de la muestra obtenida.
+
+#Media
+m <- 250 
+#Desviación típica
+sd <- 13
+#Números
+n <- 1000
+
+#Generación de la muestra
+muestra <- rnorm(n, m, sd) 
+
+#Histograma
+hist(muestra)
+
+#Función de densidad
+li<-m-3*sd
+ls<-m+3*sd
+
+# Número de puntos a dibujar
+npuntos<-ls-li
+x<-seq(li, ls, length.out=npuntos)
+# Valores de y
+y<-dnorm(x, m, sd)
+
+# Dibujar f(w)
+fw<-plot(x, y, type="l", xlab="Variable W", ylab="f(w)", main="Función de densidad N(250, 13)", col="red")
+
+#Representamos histograma y función de densidad en la misma gráfica
+#Intervalos
+int<-round(sqrt(n), 0) 
+
+# Histograma de la muestra
+hist(muestra, breaks=int, freq=F, xlab="muestra", ylab="Densidad",     main="Histograma", col="lightblue", border="blue")
+# Incluimos f(w)
+lines(muestra, dnorm(muestra,m,sd), type="p", col="red") 
