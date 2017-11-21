@@ -211,3 +211,38 @@ boxplot(formula = Datos.Andalucia$Tasa.actividad.2001 ~ Datos.Andalucia$Provinci
 #consideradas significativas. En conclusión podemos afirmar que la tasa de actividad de todas las provincias presentan un coeficiente de asimetría prácticamente nulo.
 #Por último, podemos observar como el conjunto de outliers depende de cada provincia. Habiendo provincias que no presentan datos anómalos (Córdoba o Málaga),
 #mientras que otras representan varios outliers (Cádiz y Sevilla, por ejemplo).
+
+
+
+
+#####################################
+# 3. DISTRIBUCIONES DE PROBABILIDAD #
+#####################################
+
+#1. Consideremos una variable aleatoria que sigue una distribución B (15, 0.33). Se pide:
+
+#1.1. ¿Qué valor de la variable deja por debajo de sí el 75% de la probabilidad?
+qbinom(0.75, 15, 0.33) #6
+
+#1.2. Calcular el percentil 95% de la distribución.
+qbinom(0.95, 15, 0.33) #8
+
+#1.3. Obtener una muestra de tamaño 1000 de esta distribución, representarla gráficamente las frecuencias observadas de cada valor de la distribución 
+#mediante un diagrama de barras y comparar éste con las frecuencias esperadas según el modelo que genera los datos.
+
+#Generamos las muestras
+muestra_binomial <- rbinom(1000, 15, 0.33)
+
+#Consultados datos
+summary(muestra_binomial)
+
+#Histograma de la muestra binomial generada
+hist(muestra_binomial, main="Distribución Binomial")
+
+#A la vista del histograma con las frecuencias obtenidas, vemos que los resultados se ajustan al modelo esperado:
+#Como ya hemos observado con el comando 'summary' la mediana se encuentra en el valor 5, mientras que los C1 y C3 se sitúan en los valores 4 y 6, respectivamente.
+#Además, a la vista de la gráifca vemos que coincide con los valores obtenidos en los puntos 1.1 y 1.2:
+#Ya que el valor 6 intuimos que puede dejar a su izquierda el 75% de los datos, mientras que el valor 8 abarca el 95% de los mismos.
+
+
+
