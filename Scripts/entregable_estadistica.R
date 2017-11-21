@@ -266,6 +266,7 @@ qnorm(0.95, 250, 13)  #271.3831
 
 #Por tanto, el intervalo de valores con el que nos quedaremos será [228.6169 - 271.3831]
 
+
 #2.4. Obtener una muestra de tamaño 1000 de la distribución, representar la función de densidad de esta distribución y compararla con el histograma de la muestra obtenida.
 
 #Media
@@ -302,3 +303,119 @@ int<-round(sqrt(n), 0)
 hist(muestra, breaks=int, freq=F, xlab="muestra", ylab="Densidad",     main="Histograma", col="lightblue", border="blue")
 # Incluimos f(w)
 lines(muestra, dnorm(muestra,m,sd), type="p", col="red") 
+
+
+########################################################
+# 4. CONTRASTES DE HIPÓTESIS E INTERVALOS DE CONFIANZA #
+########################################################
+
+#Descripción del dataset
+#Mediante una red de sensores se han recogido datos sobre la temperatura media diaria (ºC) en dos estaciones A y B durante 52 días. 
+#Los valores recogidos de la temperatura se encuentran en la hoja de datos “Temper” incluida en el fichero Temperatura.RData.
+
+#Ejercicios
+#1. Cargar el fichero Temperatura.RData. 
+load('./Datos/Temperatura.RData')
+str(Temper)
+
+#2. Crear dos nuevas variables, temp.A y temp.B, que contengan las temperaturas de las estaciones A y B, respectivamente.
+temp.A <- Temper[Temper$Estacion == "A",]$Temper
+temp.B <- Temper[Temper$Estacion == "B",]$Temper
+
+
+#3. Da un intervalo de confianza para la temperatura media diaria de la estación A, al 95%, y a partir de éste indica si se puede admitir, y por qué, 
+#que la temperatura media diaria en dicha estación sea de 19ºC, con ese mismo nivel de confianza.
+hist(temp.A)
+summary(temp.A)
+
+IC <- t.test(temp.A, alternative = "two.sided", conf.level = 0.95)
+IC #El intervalo de confianza al 95% es [19.39401, 20.24131].
+#Por lo tanto, no se puede admitir que 19ºC sea la temperatura media diaria de la estación A si se desea un intervalo de confianza del 95%
+
+#4. Plantea un test de hipótesis que refleje la pregunta del apartado anterior y resuélvelo sin usar el intervalo de confianza (riesgo de 1ª especie 5%)
+
+#El contraste que se plantea es:
+#H0: mA = 19
+#H1: mA <> 19
+#Como se pide explícitamente contrastar si la media puede ser 19ºC, ahora sí hay que especificar el valor del argumento mu = 19.
+Contraste <- t.test(temp.A, alternative = "two.sided", mu = 19, conf.level = 0.95)
+Contraste
+#El p-valor es 0.0002496, y es mucho menor que 0,05, por lo que podemos afirmar que la temperatura media en la estación A
+#no estaría en 19ºC con un riesgo de 1ª especie del 5%.
+
+#5. Determina si puede admitirse, con un riesgo de primera especie de 1%, que la temperatura media diaria es la misma en las dos estaciones. 
+#Plantea previamente el correspondiente contraste de hipótesis.
+
+#En este caso vamos a comparar la temperatura en la estación A (temp.A) y la temperatura en la estación B (temp.B).
+#Se trata de una comparación de medias de 2 poblaciones pareadas: se comparan dos características (temp.A y temp.B) para 2 estaciones de temperatura.
+#Mediante el test vamos a tratar de determinar si puede admitirse, con un riesgo de primera especie
+#de 1% (alfa), que la temperatura media es la misma en la estación A y en la B.
+#El contrsaste o test de hipótesis que se plantea es:
+#H0: mA = mB
+#H1: mA <> mB
+
+#En primer lugar vamos a determinar si las varianzas de la temp media en ambas estaciones son iguales con el var.test() (Test F). 
+var.temp <- var.test(temp.A, temp.B, ratio = 1, alternative = "two.sided", conf.level = 0.99)
+var.temp
+#El p-valor es 0.6825, y es mayor que 0,1, por lo que podemos afirmar que la varianza de la temperatura en la estación A no difere de la del B,
+#con un riesgo de 1ª especia del 1%
+#Así pues, ahora podemos volver sobre la comparación de medias (temp) asumiendo que las varianzas de las temperaturas en las estaciones A y B son iguales.
+#Por otra parte, tal y como se ha planteado el contraste inicialmente, consideramos que el procedimiento estadístico empleado es bilateral,
+#por lo que incorporamos el argumento alternative = "two.sided". 
+
+#Por último, la hipótesis a contrastar (mA = mB) representa que las medias de la temperatura en la estación A y en la estación B pueden considerarse iguales.
+#Esto esm la hipótesis nula implícita es que la diferencia de las medias de la temperatura es cero (mA - mB = 0).
+#Por tanto, el valor del argumento mu, que representa la diferencia de medias que se contrasta en la H0, debe ser mu = 0.
+#Ya tenemos toda la información necesaria para realizar el contraste ejecutando el test.t:
+test.temperaturaAB <- t.test(temp.A, temp.B, alternative = "two.sided", mu = 0, paired = F, var.equal = T, conf.level = 0.99)
+test.temperaturaAB
+#El p-valor es 0.5224, y es mayor que 0,1 (mayor que 0.5, de hecho), por lo que podemos afirmar que la temperatura media
+#en la estación A no difiere significativamente de la temp media de la B, con un riesgo de 1ª especie del 1%. 
+
+#6. Obtén un intervalo de confianza (99%) para la diferencia de temperaturas entre estaciones. 
+
+#Este intervalo de confianza se puede obtener a raíz del resultado obtenido en el apartado anterior. Donde obtuvimos:
+#99 percent confidence interval:
+#  -0.9490744  0.5745257
+
+#Así pues, el intervalo de confianza al 99% es el siguiente: [-0.9490744, 0.5745257].
+#Es importante destacar que este rango no representa un intervalo para las temperaturas medias, sino para la diferencia de las medias entre la temperatura en la estación A y la temp en la estación B.
+
+#¿Aporta alguna información adicional al resultado obtenido en el apartado anterior?
+
+#Para saber si las medias de temperatura entre ambas estaciones pueden considerarse iguales, bastaría sólo con el contraste.
+#Sin embargo, con el intervalo de confianza podemos determinar también el umbral a partir del cuál podemos considerar ambas medias significativamente iguales o no.
+#De este modo el intervalo [-0.9490744, 0.5745257] nos indica que cualquier hipótesis nula que planteáramos donde las diferencias de las medias difirieran
+#en -0.9490744 (si mA < mB) o 0.5745257 (si mA > mB) sería aceptada también.
+
+#Si lo que queremos es simplemente determinar si podemos admitir que hay o no diferencias en cuanto a la media de la temperatura en las estaciones A y B,
+#el cálculo del intervalo de confianza no aportaría nada, sería suficiente realizar el test propiamente dicho y evaluar el p valor.
+#Ahora bien, dar un intervalo de confianza es más informativo que aceptar o rechazar una hipótesis concreta para un nivel de confianza determinado.
+#En este caso, el intervalo [-0.9490744, 0.5745257] nos indica que cualquier hipótesis nula que planteáramos de modo que las medias de las temperaturas
+#difirieran realmente en -0.9490744 (si mA < mB) o 0.5745257 (si mA > mB) sería aceptada también.
+#Por tanto, si mA < mB no sería admisible una diferencia entre las medias menor que ****, en caso
+
+
+#7. Se sabe que a lo largo de los 52 días, la estación A falló 5 días y la B 7 días. 
+#¿Puede afirmarse con un nivel de confianza del 90% que la proporción de días fallados es la misma en las dos estaciones? 
+
+#Para responder a esta pregunta podemos construir un IC para la diferencia de proporciones de temperaturas en ambas estaciones.
+#Creamos matriz de contingencia
+fallo.A <- 5
+fallo.B <- 7
+
+exito.A <- length(temp.A) - fallo.A
+exito.B <- length(temp.B) - fallo.B
+
+tabla_cont <- matrix(c(fallo.A,fallo.B, exito.A, exito.B), 2, 2)
+tabla_cont
+
+#Para un nivel de confianza del 90%, se tiene que el nivel de significación alfa es 0,1. Suponemos también que el contraste es bilateral.
+#Realizamos el contraste: 
+prop.test(tabla_cont, alternative = "two.sided", conf.level = 0.9)
+
+#Como p-valor es 0.7993, y es mayor que 0,1, podemos afirmar que la proporción de fallos en la estación A no difiere
+#significativamente de los de la estación B, con un riesgo de 1ª especie del 10%. 
+
+#También llegamos a la misma conclusión observando que el 0 (que implicaría una diferencia nula entre ambas proporciones)
+#se encuentra también en el intervalo de confianza para la diferencia de proporciones obtenido: [-0.10648910  0.05914404].
